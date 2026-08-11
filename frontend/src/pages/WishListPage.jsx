@@ -9,7 +9,7 @@ import GridListButton from "../components/GridListButton";
 
 export default function WishListPage() {
 
-  const [listView, setListView] = useState(true)
+  const [isGridView, setIsGridView] = useState(true);
 
   const { addToCart } = useCart();
   const { wishlist } = useWishlist();
@@ -17,22 +17,18 @@ export default function WishListPage() {
   return (
     <section className="py-5">
       <div className="container">
-        <h1 className="cart-hero mt-3 mb-5">
-          <span className="d-block">La tua</span>
-          <em className="d-block">Wishlist.</em>
-        </h1>
+        <div className="d-flex flex-wrap align-items-end justify-content-between gap-4 mt-3 mb-5">
+          <h1 className="cart-hero mb-0">
+            <span className="d-block">La tua</span>
+            <em className="d-block">Wishlist.</em>
+          </h1>
 
-        {wishlist.length != 0 &&
-          <div className="d-flex align-items-center justify-content-between mb-3">
-
-            <GridListButton setListView={setListView} />
-
-          </div>
-        }
+          {wishlist.length > 0 && <GridListButton setIsGridView={setIsGridView} />}
+        </div>
 
         <div className="row g-2 g-lg-3 g-xl-4">
           {wishlist.map((product) => (
-            listView ?
+            isGridView ?
               (
                 <div key={product.slug} className="col-12 col-sm-6 col-md-4 col-xl-3">
                   <ProductCard product={product} addToCart={() => addToCart(product, 1)} />
