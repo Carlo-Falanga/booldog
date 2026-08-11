@@ -18,10 +18,22 @@ export default function CartPage() {
   return (
     <section className="py-5">
       <div className="container">
-        <h1 className="cart-hero mt-3 mb-5">
-          <span className="d-block">Il tuo</span>
-          <em className="d-block">Carrello.</em>
-        </h1>
+        <div className="d-flex flex-wrap align-items-end justify-content-between gap-4 mt-3 mb-5">
+          <h1 className="cart-hero mb-0">
+            <span className="d-block">Il tuo</span>
+            <em className="d-block">Carrello.</em>
+          </h1>
+
+          {cart.length > 0 && (
+            <Link
+              to="/products"
+              className="btn btn-dark rounded-pill border-0 btn_cart px-4 py-2 d-inline-flex align-items-center gap-2"
+            >
+              <i className="bi bi-arrow-left-short"></i>
+              Continua a comprare
+            </Link>
+          )}
+        </div>
 
         {cart.length === 0 ? (
           <div className="text-center py-5">
@@ -40,13 +52,6 @@ export default function CartPage() {
         ) : (
           <div className="row row-cols-1 row-cols-lg-2 g-5 ">
             <div className="col">
-              <Link to="/products">
-                <button className="btn btn-dark rounded-pill border-0 btn_cart mb-5 px-4 py-2">
-                  <i className="bi bi-arrow-left-short pe-2"></i>
-                  Continua a comprare
-                </button>
-              </Link>
-
               <CartProductsList
                 total={total}
                 updateQuantity={updateQuantity}
