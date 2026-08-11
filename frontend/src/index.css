@@ -531,6 +531,8 @@ main {
 
 .nav-main {
   background: var(--bool-nav-bg);
+  -webkit-backdrop-filter: blur(16px) saturate(140%);
+  backdrop-filter: blur(16px) saturate(140%);
 
   a,
   button {
