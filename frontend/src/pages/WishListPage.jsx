@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { Link } from "react-router-dom";
 import { useCart } from "../context/useCart";
 import { useWishlist } from "../context/useWishlist";
 import ProductCard from "../components/ProductCard";
@@ -52,8 +53,15 @@ export default function WishListPage() {
               <h2 className="mb-4">La tua Wishlist è vuota.</h2>
               <p className="text-muted mb-4">
                 Non hai prodotti preferiti per il momento. Clicca sui cuori per
-                aggiungerli qui!
+                aggiungerli qui.
               </p>
+              <Link
+                to="/products"
+                className="btn btn-dark rounded-pill px-4 py-3 d-inline-flex align-items-center gap-2 btn-cta"
+              >
+                Scopri i prodotti
+                <i className="bi bi-arrow-right btn-arrow"></i>
+              </Link>
             </div>
           )
         }

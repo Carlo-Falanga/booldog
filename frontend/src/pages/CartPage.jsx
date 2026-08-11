@@ -29,6 +29,13 @@ export default function CartPage() {
             <p className="text-muted mb-4">
               Sembra che tu non abbia ancora aggiunto articoli al tuo carrello.
             </p>
+            <Link
+              to="/products"
+              className="btn btn-dark rounded-pill px-4 py-3 d-inline-flex align-items-center gap-2 btn-cta"
+            >
+              Scopri i prodotti
+              <i className="bi bi-arrow-right btn-arrow"></i>
+            </Link>
           </div>
         ) : (
           <div className="row row-cols-1 row-cols-lg-2 g-5 ">
