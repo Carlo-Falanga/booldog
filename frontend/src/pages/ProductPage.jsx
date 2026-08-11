@@ -5,6 +5,7 @@ import { useCart } from "../context/useCart";
 import ProductCard from "../components/ProductCard";
 import WishListButton from "../components/WishListButton";
 import { API_BASE_URL, getProductImageUrl } from "../lib/api";
+import { formatPrice } from "../lib/price";
 
 export default function ProductPage() {
   const { cart, addToCart } = useCart();
@@ -87,7 +88,7 @@ export default function ProductPage() {
                     <div className="mb-1">Materiale <span className="text-black">{dataProduct.material}</span></div>
                   </div>
                   <div className="border-top py-4">
-                    <p className="h1 mb-0 lh-1">{dataProduct.price} €</p>
+                    <p className="h1 mb-0 lh-1">{formatPrice(dataProduct.price)}</p>
                   </div>
                   {dataProduct.stock === 0 ? <div className="border-top py-4">
                     <p className="cart-meta mb-0 esaurito_product">Esaurito</p>

@@ -1,6 +1,7 @@
 import { useCart } from "../context/useCart";
 import { Link } from "react-router-dom";
 import { getProductImageUrl } from "../lib/api";
+import { formatPrice } from "../lib/price";
 
 export default function CartProductsList() {
   const { cart, updateQuantity, removeFromCart } = useCart();
@@ -98,12 +99,12 @@ export default function CartProductsList() {
                     </button>
                   </div>
                   <div className="pt-3 d-block d-md-none">
-                    <span className="cart-name fs-4">€ {item.price}</span>
+                    <span className="cart-name fs-4">{formatPrice(item.price)}</span>
                   </div>
                 </div>
 
                 <div className="col-3 text-end d-none d-md-block">
-                  <span className="cart-name fs-4">€ {item.price}</span>
+                  <span className="cart-name fs-4">{formatPrice(item.price)}</span>
                 </div>
               </li>
             );

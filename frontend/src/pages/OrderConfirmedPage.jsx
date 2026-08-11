@@ -3,6 +3,7 @@ import axios from "axios";
 import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { API_BASE_URL } from "../lib/api";
+import { formatPrice } from "../lib/price";
 
 export default function OrderConfirmedPage() {
   const { id } = useParams();
@@ -71,7 +72,7 @@ export default function OrderConfirmedPage() {
               })}
             </li>
             <li>
-              <span className="fw-semibold">Totale:</span> {data.total}€
+              <span className="fw-semibold">Totale:</span> {formatPrice(data.total)}
             </li>
             <li>
               <span className="fw-semibold">Stato:</span> {data.status}
@@ -97,8 +98,8 @@ export default function OrderConfirmedPage() {
                   <tr key={index}>
                     <td>{item.name}</td>
                     <td>{item.quantity}</td>
-                    <td>{item.price}€</td>
-                    <td>{(item.price * item.quantity).toFixed(2)}€</td>
+                    <td>{formatPrice(item.price)}</td>
+                    <td>{formatPrice(item.price * item.quantity)}</td>
                     <td></td>
                   </tr>
                 ))}
@@ -107,7 +108,7 @@ export default function OrderConfirmedPage() {
                   <td></td>
                   <td></td>
                   <td></td>
-                  <td className="fw-semibold">{data.total}€</td>
+                  <td className="fw-semibold">{formatPrice(data.total)}</td>
                 </tr>
               </tbody>
             </table>

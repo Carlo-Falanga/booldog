@@ -3,6 +3,7 @@ import { useCart } from "../context/useCart";
 import { Link } from "react-router-dom";
 import CartProductsList from "../components/CartProductsList";
 import CartTotal from "../components/CartTotal";
+import { formatPrice } from "../lib/price";
 
 export default function CartPage() {
   const { cart, setCart, total, updateQuantity, removeFromCart } = useCart();
@@ -57,7 +58,7 @@ export default function CartPage() {
                       Subtotale ({cart.reduce((s, i) => s + i.quantity, 0)}{" "}
                       articoli)
                     </span>
-                    <span>€ {total.toFixed(2)}</span>
+                    <span>{formatPrice(total)}</span>
                   </li>
                   <li className="d-flex justify-content-between mb-2">
                     <span>Spedizione in tutta Europa</span>

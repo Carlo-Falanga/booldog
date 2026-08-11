@@ -2,6 +2,7 @@ import { Link } from "react-router-dom";
 import WishListButton from "./WishListButton";
 import { useCart } from "../context/useCart";
 import { getProductImageUrl } from "../lib/api";
+import { formatPrice } from "../lib/price";
 
 export default function ProductCardList({ product, animalType }) {
 
@@ -26,7 +27,7 @@ export default function ProductCardList({ product, animalType }) {
           <div className="text-center">
             <div className="cart-meta mb-2">{animalType ? '' : `${product.animal_name} / `}{product.category}</div>
             <h3 className="cart-name h4 mb-2">{product.name}</h3>
-            <div className="cart-name h5">&euro; {product.price}</div>
+            <div className="cart-name h5">{formatPrice(product.price)}</div>
             {product.stock === 0 ?
               <div className="soldout-btn">Esaurito</div>
               :

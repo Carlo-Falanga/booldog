@@ -3,6 +3,7 @@ import axios from "axios";
 import { useCart } from "../context/useCart";
 import { Link, useNavigate } from "react-router-dom";
 import { API_BASE_URL } from "../lib/api";
+import { formatPrice, splitPrice } from "../lib/price";
 
 export default function CheckoutPage() {
   const [couponCode, setCouponCode] = useState("");
@@ -113,7 +114,7 @@ export default function CheckoutPage() {
         setDiscount(data.discount);
         setAppliedCouponId(data.coupon?.id ?? null);
         setCouponStatus("valid");
-        setCouponMessage(`Coupon applicato! Sconto di ${data.discount}€`);
+        setCouponMessage(`Coupon applicato! Sconto di ${formatPrice(data.discount)}`);
         setCouponName(data.coupon);
 
         console.log(data);
@@ -336,7 +337,7 @@ export default function CheckoutPage() {
                         </span>
                       </div>
                       <span className="order_product_font fw-medium">
-                        €{item.price}
+                        {formatPrice(item.price)}
                       </span>
                     </div>
                   ))}
@@ -393,7 +394,7 @@ export default function CheckoutPage() {
                 <div className="d-flex flex-column gap-3 checkout_subtotal_font">
                   <div className="d-flex justify-content-between">
                     <span>Subtotale</span>
-                    <span>€{subtotal.toFixed(2)}</span>
+                    <span>{formatPrice(subtotal)}</span>
                   </div>
                   {couponStatus === "valid" && (
                     <div className="d-flex justify-content-between">
@@ -403,7 +404,7 @@ export default function CheckoutPage() {
                           {couponName.code}
                         </span>
                       </span>
-                      <span className="text-danger fw-bold">-{discount}€</span>
+                      <span className="text-danger fw-bold">-{formatPrice(discount)}</span>
                     </div>
                   )}
                   
@@ -418,9 +419,9 @@ export default function CheckoutPage() {
                 <div className="d-flex justify-content-between align-items-center">
                   <h3 className="cart-name">Totale</h3>
                   <span className="cart-name cart_total">
-                    € {total.toFixed(2).split(".")[0]}
-                    <span className=" ms-1 cart_cents">
-                      ,{total.toFixed(2).split(".")[1]}
+                    € {splitPrice(total).euros}
+                    <span className="ms-1 cart_cents">
+                      ,{splitPrice(total).cents}
                     </span>
                   </span>
                 </div>
@@ -432,7 +433,7 @@ export default function CheckoutPage() {
                     type="submit"
                     className="btn btn-dark btn-lg w-100 rounded-pill py-3 mb-4 d-flex align-items-center justify-content-center gap-2 border-0 btn_cart"
                   >
-                    <span className="fs-6">paga € {total.toFixed(2)}</span>
+                    <span className="fs-6">paga {formatPrice(total)}</span>
                     <i className="bi bi-arrow-right"></i>
                   </button>
                 </div>

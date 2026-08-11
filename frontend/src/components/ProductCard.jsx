@@ -2,6 +2,7 @@ import { Link } from "react-router-dom";
 import WishListButton from "./WishListButton";
 import { useCart } from "../context/useCart";
 import { getProductImageUrl } from "../lib/api";
+import { formatPrice } from "../lib/price";
 
 export default function ProductCard({ product, animalType }) {
 
@@ -30,7 +31,7 @@ export default function ProductCard({ product, animalType }) {
         <div className="px-3 col-auto">
           <div className="border-top py-3 d-flex align-items-center justify-content-between">
             <div className="font-newsreader h3 mb-0 lh-1 fw-light">
-              {product.price} €
+              {formatPrice(product.price)}
             </div>
             <div>
               {product.stock === 0 ?
