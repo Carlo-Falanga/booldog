@@ -12,7 +12,7 @@ export default function ProductCardList({ product, animalType }) {
 
   return (
 
-    <div className="border rounded-3 overflow-hidden">
+    <div className="product-card border rounded-3 overflow-hidden">
       <div className="d-flex flex-wrap">
 
         <div className="col-12 col-md-3 position-relative">
