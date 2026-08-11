@@ -17,5 +17,9 @@ export default defineConfig([
       globals: globals.browser,
       parserOptions: { ecmaFeatures: { jsx: true } },
     },
+    rules: {
+      // resetting state from an effect is the plainest way to write these cases
+      'react-hooks/set-state-in-effect': 'off',
+    },
   },
 ])
