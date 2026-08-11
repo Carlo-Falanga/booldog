@@ -1,4 +1,4 @@
-const mysql = require("mysql2")
+const mysql = require("mysql2/promise")
 
 
 const credentials = {
@@ -9,11 +9,17 @@ const credentials = {
     "port": process.env.DB_PORT
 }
 
-const connection = mysql.createConnection(credentials);
+const pool = mysql.createPool(credentials)
 
-connection.connect((err) => {
-    if (err) throw err
-    console.log("Connesso al Database")
-})
+// fail loudly at startup instead of on the first request
+pool.getConnection()
+    .then((connection) => {
+        console.log("Connected to the database")
+        connection.release()
+    })
+    .catch((err) => {
+        console.error("Could not connect to the database:", err.message)
+        process.exit(1)
+    })
 
-module.exports = connection
+module.exports = pool

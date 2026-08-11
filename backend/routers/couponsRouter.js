@@ -4,7 +4,6 @@ const couponController = require("../controllers/couponController")
 
 
 
-// validate 
 router.post("/", couponController.validate)
 
 

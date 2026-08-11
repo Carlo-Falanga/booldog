@@ -102,9 +102,12 @@ export default function CheckoutPage() {
     setDiscount(0);
 
     try {
-      const { data } = await axios.post("http://localhost:3000/validate", {
+      const { data } = await axios.post("http://localhost:3000/coupons", {
         code: couponCode.trim(),
-        cart_total: subtotal,
+        products: cart.map((item) => ({
+          id: item.id,
+          quantity: item.quantity,
+        })),
       });
 
       if (data.valid) {

@@ -1,32 +1,23 @@
-const connection = require("../data/db")
+const pool = require("../data/db")
 
-const index = (req, res) => {
+// the ORDER BY is only ever built from these, never from the query string
+const SORT_OPTIONS = {
+    "price-up": "p.price",
+    "price-down": "p.price DESC",
+    "name": "p.name"
+}
+const DEFAULT_SORT = "p.created_at DESC"
 
-    //salvo l'ordine passato nell'url e il search
+const index = async (req, res) => {
+
     const { sort, search } = req.query;
 
-    let orderQuery = `p.created_at DESC`;
-
-    switch (sort) {
-        //modifico la query string sulla base dell'ordine selezionato
-        case "price-up":
-            orderQuery = `p.price`;
-            break;
-        case "price-down":
-            orderQuery = `p.price DESC`;
-            break;
-        case "name":
-            orderQuery = `p.name`;
-            break;
-        default:
-            //nel caso default, che è anche quello iniziale, il sortaggio è per latest
-            orderQuery = `p.created_at DESC`;
-    }
+    const orderQuery = SORT_OPTIONS[sort] || DEFAULT_SORT;
 
     const queryParams = [];
 
     let sql = `
-    SELECT 
+    SELECT
     p.id,
     p.slug,
     p.name,
@@ -55,48 +46,30 @@ const index = (req, res) => {
 
     sql += ` ORDER BY ${orderQuery}`;
 
-    connection.query(sql, queryParams, (err, results) => {
-
-        if (err) return res.status(500).json({
+    try {
+        const [results] = await pool.query(sql, queryParams);
+        res.json(results);
+    } catch (err) {
+        res.status(500).json({
             error: true,
             message: "Database error"
-        })
-
-        res.json(results)
-    })
+        });
+    }
 
 }
 
-const indexAnimalType = (req, res) => {
+const indexAnimalType = async (req, res) => {
 
-    // prendo l'animal type passato dalla call api
     const { animalType } = req.params
 
-    //salvo l'ordine passato nell'url e il search
     const { sort, search } = req.query;
 
-    let orderQuery = `p.created_at DESC`;
-
-    switch (sort) {
-        //modifico la query string sulla base dell'ordine selezionato
-        case "price-up":
-            orderQuery = `p.price`;
-            break;
-        case "price-down":
-            orderQuery = `p.price DESC`;
-            break;
-        case "name":
-            orderQuery = `p.name`;
-            break;
-        default:
-            //nel caso default, che è anche quello iniziale, il sortaggio è per latest
-            orderQuery = `p.created_at DESC`;
-    }
+    const orderQuery = SORT_OPTIONS[sort] || DEFAULT_SORT;
 
     const queryParams = [`${animalType}`];
 
     let sql = `
-    SELECT 
+    SELECT
     p.id,
     p.slug,
     p.name,
@@ -126,24 +99,23 @@ const indexAnimalType = (req, res) => {
 
     sql += ` ORDER BY ${orderQuery}`;
 
-    connection.query(sql, queryParams, (err, results) => {
-
-        if (err) return res.status(500).json({
+    try {
+        const [results] = await pool.query(sql, queryParams);
+        res.json(results);
+    } catch (err) {
+        res.status(500).json({
             error: true,
             message: "Database error"
-        })
-
-        res.json(results)
-    })
+        });
+    }
 
 }
 
-const show = (req, res) => {
+const show = async (req, res) => {
     const { slug } = req.params;
 
-    // 1. Prodotto + brand + animale
     const productSql =
-        `  SELECT 
+        `  SELECT
       p.id,
       p.slug,
       p.name,
@@ -171,13 +143,8 @@ const show = (req, res) => {
     LIMIT 1`
         ;
 
-
-    connection.query(productSql, [slug], (err, productResults) => {
-
-        if (err) return res.status(500).json({
-            error: true,
-            message: "Database error err"
-        })
+    try {
+        const [productResults] = await pool.query(productSql, [slug]);
 
         if (productResults.length === 0) {
             return res.status(404).json({ error: "Prodotto non trovato" });
@@ -185,11 +152,8 @@ const show = (req, res) => {
 
         const product = productResults[0];
 
-
-
-        // 3. Prodotti correlati
         const relatedSql =
-            ` SELECT 
+            ` SELECT
             p.slug,
             p.id,
             p.name,
@@ -208,22 +172,18 @@ const show = (req, res) => {
         LIMIT 4`
             ;
 
-        connection.query(relatedSql, [product.id, product.brand_id, product.category], (err, relatedResults) => {
+        const [relatedResults] = await pool.query(relatedSql, [product.id, product.brand_id, product.category]);
 
-            if (err) return res.status(500).json({
-                error: true,
-                message: "Database error"
-            })
-
-            // 4. Compongo la risposta finale
-            res.json({
-                ...product,
-                related: relatedResults,
-            });
-        }
-        );
-    });
-    ;
+        res.json({
+            ...product,
+            related: relatedResults,
+        });
+    } catch (err) {
+        res.status(500).json({
+            error: true,
+            message: "Database error"
+        });
+    }
 }
 
 module.exports = { index, show, indexAnimalType }

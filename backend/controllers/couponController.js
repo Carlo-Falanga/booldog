@@ -1,54 +1,68 @@
-const connection = require("../data/db")
+const pool = require("../data/db")
+const { evaluateCoupon, REASON_EXPIRED } = require("../services/coupon")
+const { roundToCents } = require("../services/money")
 
-const validate = (req, res) => {
+// the total comes from the database prices, not from the client
+const validate = async (req, res) => {
 
-    const { code, cart_total } = req.body
+    const { code, products } = req.body
 
-    if (!code || cart_total === undefined) {
+    if (!code || !Array.isArray(products) || products.length === 0) {
         return res.status(400).json({ error: "Dati mancanti" })
     }
 
-    const sql = "SELECT * FROM coupons WHERE code = ?"
+    try {
+        const productIds = products.map((p) => p.id)
+        const productSql = `SELECT id, price FROM products WHERE id IN (?)`
+        const [dbProducts] = await pool.query(productSql, [productIds])
 
-    connection.query(sql, [code], (err, results) => {
+        if (dbProducts.length === 0) {
+            return res.status(404).json({ error: "Prodotti non trovati" })
+        }
 
-        if (err) return res.status(500).json({
-            error: true,
-            message: "Database error"
-        })
+        let cartTotal = 0
+        for (const cartItem of products) {
+            const dbProduct = dbProducts.find((p) => p.id === cartItem.id)
 
-        if (results.length === 0) {
+            if (!dbProduct) {
+                return res.status(404).json({ error: "Prodotto non trovato" })
+            }
+
+            cartTotal += parseFloat(dbProduct.price) * cartItem.quantity
+        }
+
+        cartTotal = roundToCents(cartTotal)
+
+        const couponSql = "SELECT * FROM coupons WHERE code = ?"
+        const [coupons] = await pool.query(couponSql, [code])
+
+        if (coupons.length === 0) {
             return res.status(404).json({ valid: false, message: "Coupon non trovato" })
         }
 
-        const coupon = results[0]
-        const now = new Date().getTime()
-        const validFrom = new Date(coupon.valid_from).getTime()
-        const validTo = new Date(coupon.valid_to).getTime()
+        const coupon = coupons[0]
+        const evaluation = evaluateCoupon(coupon, cartTotal)
 
-        // controllo date
-        if (now < validFrom || now > validTo) {
-            return res.json({ valid: false, message: "Coupon scaduto o non ancora attivo" })
+        if (!evaluation.valid) {
+            const message = evaluation.reason === REASON_EXPIRED
+                ? "Coupon scaduto o non ancora attivo"
+                : `Totale minimo richiesto: ${evaluation.minCartAmount}€`
+
+            return res.json({ valid: false, message })
         }
-
-        // controllo totale minimo carrello
-        if (coupon.min_cart_amount !== null && cart_total < coupon.min_cart_amount) {
-            return res.json({
-                valid: false,
-                message: `Totale minimo richiesto: ${coupon.min_cart_amount}€`
-            })
-        }
-
-        const discount = parseFloat(coupon.value)
-        const new_total = Math.max(0, cart_total - discount)
 
         res.json({
             valid: true,
             coupon,
-            discount,
-            new_total
+            discount: evaluation.discount,
+            new_total: roundToCents(evaluation.newTotal)
         })
-    })
+    } catch (err) {
+        res.status(500).json({
+            error: true,
+            message: "Database error"
+        })
+    }
 }
 
 

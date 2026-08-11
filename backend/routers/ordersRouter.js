@@ -3,10 +3,8 @@ const router = express.Router()
 const orderController = require("../controllers/orderController")
 const { storeOrderValidation } = require("../validators/orderValidator")
 
-//show
 router.get("/:id", orderController.show)
 
-//store
 router.post("/", storeOrderValidation, orderController.store )
 
 module.exports = router
