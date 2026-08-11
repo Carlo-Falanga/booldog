@@ -1,6 +1,6 @@
 const nodemailer = require("nodemailer");
 
-// creo il transporter una volta sola
+// built once and reused
 const transporter = nodemailer.createTransport({
   host: "sandbox.smtp.mailtrap.io",
   port: 2525,
@@ -10,11 +10,9 @@ const transporter = nodemailer.createTransport({
   },
 });
 
-// funzione che invia la mail di conferma a partire dai dati dell'ordine
 const sendOrderConfirmation = async (order) => {
   const { email, user_full_name, order_code, total, items } = order;
 
-  // costruisco la lista dei prodotti in html
   const itemsHtml = items
     .map((item) => `<li>${item.name} x ${item.quantity}</li>`)
     .join("");

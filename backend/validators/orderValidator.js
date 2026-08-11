@@ -2,7 +2,7 @@ const { body } = require("express-validator");
 const validator = require("validator");
 const { isValidPhoneNumber, parsePhoneNumber } = require('libphonenumber-js') 
 
-// mappa nome paese (italiano/inglese) -> codice ISO 3166-1 alpha-2
+// the Italian and the English name both map to the same code
 const COUNTRY_NAME_TO_CODE = {
   // EU
   "italia": "IT", "italy": "IT",
@@ -32,7 +32,7 @@ const COUNTRY_NAME_TO_CODE = {
   "cipro": "CY", "cyprus": "CY",
   "malta": "MT",
   "lussemburgo": "LU", "luxembourg": "LU",
-  // non-EU europei
+  // non-EU
   "regno unito": "GB", "gran bretagna": "GB", "united kingdom": "GB", "uk": "GB",
   "svizzera": "CH", "switzerland": "CH",
   "norvegia": "NO", "norway": "NO",
@@ -42,7 +42,6 @@ const COUNTRY_NAME_TO_CODE = {
 
 const VALID_ISO_CODES = new Set(Object.values(COUNTRY_NAME_TO_CODE));
 
-// normalizza una stringa: lowercase, rimuove accenti, comprime spazi
 function normalizeText(s) {
   return String(s || "")
     .toLowerCase()
@@ -52,7 +51,7 @@ function normalizeText(s) {
     .replace(/\s+/g, " ");
 }
 
-// risolve "Italia", "italy" o "IT" -> "IT"
+// "Italia", "italy" and "IT" all resolve to "IT"
 function resolveCountryCode(input) {
   if (!input) return null;
   const normalized = normalizeText(input);
@@ -61,7 +60,7 @@ function resolveCountryCode(input) {
   return COUNTRY_NAME_TO_CODE[normalized] || null;
 }
 
-// chiama zippopotam.us per verificare esistenza CAP e ottenere le citta'
+// zippopotam.us tells us whether the postcode exists and which towns it covers
 async function fetchPostalInfo(countryCode, zipcode) {
   const controller = new AbortController();
   const timeout = setTimeout(() => controller.abort(), 5000);
@@ -105,7 +104,6 @@ const storeOrderValidation = [
     .isLength({ min: 2, max: 100 }).withMessage("Città deve avere tra 2 e 100 caratteri")
     .matches(/^[A-Za-zÀ-ÿ'\s-]+$/).withMessage("Nome città non valido"),
 
-  // country: accetta "Italia", "italy", "IT" -> normalizza a "IT"
   body("country")
     .trim()
     .notEmpty().withMessage("Paese obbligatorio")
@@ -117,7 +115,7 @@ const storeOrderValidation = [
     })
     .customSanitizer((value) => resolveCountryCode(value)),
 
-  // zipcode: formato + esistenza reale + corrispondenza citta'
+  // format first, then existence, then the town it belongs to
   body("zipcode")
     .trim()
     .customSanitizer((value) => value.replace(/-/g, ""))
@@ -128,24 +126,21 @@ const storeOrderValidation = [
         throw new Error("Impossibile validare il CAP: paese non valido");
       }
 
-      // 1) controllo formato locale (es. IT = 5 cifre)
       if (!validator.isPostalCode(value, country)) {
         throw new Error(`CAP "${value}" non rispetta il formato di ${country}`);
       }
 
-      // 2) controllo esistenza reale via API
       const result = await fetchPostalInfo(country, value);
 
       if (result.status === "not_found") {
         throw new Error(`Il CAP "${value}" non esiste in ${country}`);
       }
 
-      // se l'API non risponde, ci accontentiamo del controllo di formato
+      // if the API is down the format check alone has to do
       if (result.status !== "ok") {
         return true;
       }
 
-      // 3) controllo che la citta' inserita corrisponda al CAP
       const inputCity = normalizeText(req.body.city);
       const places = result.data.places || [];
 
@@ -169,16 +164,15 @@ const storeOrderValidation = [
       return true;
     }),
 
-  // phone_number: validato in base al country (fallback generico)
   body("phone_number")
   .optional({ checkFalsy: true })
   .trim()
   .custom((value, { req }) => {
-    const country = resolveCountryCode(req.body.country); // es. "IT"
+    const country = resolveCountryCode(req.body.country);
 
-    // prova prima con il paese specificato, poi come numero internazionale
+    // the selected country first, then as an international number
     const validForCountry = country && isValidPhoneNumber(value, country);
-    const validInternational = isValidPhoneNumber(value); // richiede prefisso +xx
+    const validInternational = isValidPhoneNumber(value); // needs the +xx prefix
 
     if (!validForCountry && !validInternational) {
       throw new Error("Numero di telefono non valido per il paese selezionato");
