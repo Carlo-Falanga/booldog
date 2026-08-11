@@ -144,10 +144,12 @@ export default function CheckoutPage() {
     <>
       <div className="container my-4 ">
         <div className="d-flex justify-content-start ">
-          <Link to="/cart">
-            <button className="btn btn-dark rounded-pill border-0 btn_cart px-4 py-2">
-              <i className="bi bi-arrow-left-short"></i>Modifica Carrello
-            </button>
+          <Link
+            to="/cart"
+            className="btn btn-dark rounded-pill border-0 btn_cart px-4 py-2 d-inline-flex align-items-center gap-2"
+          >
+            <i className="bi bi-arrow-left-short"></i>
+            Modifica Carrello
           </Link>
         </div>
       </div>

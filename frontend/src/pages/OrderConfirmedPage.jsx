@@ -109,10 +109,12 @@ export default function OrderConfirmedPage() {
           </div>
 
           <div className="d-flex justify-content-center align-items-center m-3">
-            <Link to="/">
-              <button className="btn btn-dark rounded-pill border-0 btn_cart">
-                <i className="bi bi-arrow-left-short"></i>Torna alla Home
-              </button>
+            <Link
+              to="/"
+              className="btn btn-dark rounded-pill border-0 btn_cart px-4 py-2 d-inline-flex align-items-center gap-2"
+            >
+              <i className="bi bi-arrow-left-short"></i>
+              Torna alla Home
             </Link>
           </div>
         </div>
