@@ -1,49 +1,56 @@
 import { useEffect, useState } from "react";
-import { Link, useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import axios from "axios";
-import { useGlobal } from "../context/CartContext";
+import { useCart } from "../context/useCart";
 import ProductCard from "../components/ProductCard";
-import SideCart from "../components/SideCart";
 import WishListButton from "../components/WishListButton";
+import { API_BASE_URL, getProductImageUrl } from "../lib/api";
 
 export default function ProductPage() {
-  const {
-    cart,
-    setCart,
-    asideCart,
-    setAsideCart,
-    addToCart,
-    increaseQuantity,
-    decreaseQuantity,
-    updateQuantity,
-    productQuantity,
-    setProductQuantity,
-  } = useGlobal();
+  const { cart, addToCart } = useCart();
 
   const [dataProduct, setDataProduct] = useState(null);
+  const [productQuantity, setProductQuantity] = useState(1);
 
   const { slug } = useParams();
 
-  useEffect(() => {
+  const [previousSlug, setPreviousSlug] = useState(slug);
+  if (slug !== previousSlug) {
+    setPreviousSlug(slug);
     setProductQuantity(1);
+  }
+
+  useEffect(() => {
     axios
-      .get(`http://localhost:3000/products/${slug}`)
+      .get(`${API_BASE_URL}/products/${slug}`)
       .then((res) => setDataProduct(res.data));
   }, [slug]);
 
-  // controllo se questo prodotto è già nel carrello e con che quantità
   const existingInCart = cart.find((p) => p.id === dataProduct?.id);
   const quantityInCart = existingInCart ? existingInCart.quantity : 0;
 
-  // quanti pezzi può ancora aggiungere l'utente al carrello
   const stock = dataProduct?.stock ?? 0;
   const remainingStock = stock - quantityInCart;
 
-  // disabilito il "+" se la prossima aggiunta supererebbe lo stock
   const isPlusDisabled = productQuantity >= remainingStock;
-
-  // disabilito "Aggiungi al carrello" se non c'è più stock disponibile
   const isAddDisabled = remainingStock <= 0;
+
+  const increaseQuantity = () => {
+    if (productQuantity < remainingStock) {
+      setProductQuantity(productQuantity + 1);
+    }
+  };
+
+  const decreaseQuantity = () => {
+    if (productQuantity > 1) {
+      setProductQuantity(productQuantity - 1);
+    }
+  };
+
+  const handleAddToCart = () => {
+    addToCart(dataProduct, productQuantity);
+    setProductQuantity(1);
+  };
 
   return (
     <section>
@@ -57,7 +64,7 @@ export default function ProductPage() {
                     <WishListButton product={dataProduct} slug={slug} />
                     <img
                       className="w-100 h-100 object-fit-contain"
-                      src={`http://localhost:3000/images/products/${dataProduct.img_url}`}
+                      src={getProductImageUrl(dataProduct.img_url)}
                       alt={dataProduct.name}
                     />
                   </div>
@@ -106,9 +113,7 @@ export default function ProductPage() {
                           <span className="small">{productQuantity}</span>
                         </div>
                         <button
-                          onClick={() =>
-                            increaseQuantity(dataProduct.stock, quantityInCart)
-                          }
+                          onClick={increaseQuantity}
                           type="button"
                           disabled={isPlusDisabled}
                           className="btn p-3 border-0"
@@ -119,7 +124,7 @@ export default function ProductPage() {
                     </div>
                     <div className="col">
                       <button
-                        onClick={() => addToCart(dataProduct, productQuantity)}
+                        onClick={handleAddToCart}
                         disabled={isAddDisabled}
                         className="btn btn-dark w-100 p-3 lh-1 rounded-pill border-0"
                       >
