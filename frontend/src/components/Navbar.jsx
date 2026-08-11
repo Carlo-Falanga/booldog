@@ -81,12 +81,6 @@ export default function Navbar() {
                 <i className="d-flex d-lg-none bi bi-chevron-right"></i>
               </NavLink>
             </li>
-            <li className="col-12 col-lg-auto p-2 p-xl-3">
-              <NavLink to="/chi-siamo" className="text-decoration-none d-flex align-items-center justify-content-between">
-                <span>Chi siamo</span>
-                <i className="d-flex d-lg-none bi bi-chevron-right"></i>
-              </NavLink>
-            </li>
           </ul>
         </div>
 

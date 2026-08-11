@@ -720,16 +720,6 @@ footer {
   background-color: var(--bool-paper);
 }
 
-/* CHI SIAMO */
-.card_team {
-  border: 1px solid var(--bool-bone-deep);
-}
-
-.img_team {
-  height: 20rem;
-  object-fit: cover;
-}
-
 .required-star {
   color: red;
   margin-left: 2px;
