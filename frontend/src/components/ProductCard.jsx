@@ -1,12 +1,12 @@
-import { Link, useParams } from "react-router-dom";
+import { Link } from "react-router-dom";
 import WishListButton from "./WishListButton";
-import { useGlobal } from "../context/CartContext";
+import { useCart } from "../context/useCart";
+import { getProductImageUrl } from "../lib/api";
 
 export default function ProductCard({ product, animalType }) {
 
-  const { cart, addToCart } = useGlobal();
+  const { cart, addToCart } = useCart();
 
-  // capisco se il prodotto è presente nel carrello e quanti ce n'è sono
   const cartItem = cart.find((cartProduct) => cartProduct.id === product.id);
   const productsInCart = cartItem ? cartItem.quantity : 0;
 
@@ -18,7 +18,7 @@ export default function ProductCard({ product, animalType }) {
         <div className="col-auto position-relative">
           <WishListButton product={product} slug={product.slug} />
           <Link to={`/product/${product.slug}`} className="aspect-ratio-1x1 d-flex align-items-center justify-content-center">
-            <img className="w-100 h-100 object-fit-contain p-3" src={`http://localhost:3000/images/products/${product.img_url}`} alt={`${product.name}'s picture`} />
+            <img className="w-100 h-100 object-fit-contain p-3" src={getProductImageUrl(product.img_url)} alt={`${product.name}'s picture`} />
           </Link>
         </div>
 
@@ -41,7 +41,6 @@ export default function ProductCard({ product, animalType }) {
                   disabled={product.stock === 0}
                   className="btn bg-black p-2 border-0 rounded-pill text-white d-flex justify-content-between align-items-center">
                   {
-                    // verifico se il prodotto è già nel carrello
                     productsInCart > 0
                     &&
                     <span className="already-present-num mx-2 align-self-center">{productsInCart}</span>

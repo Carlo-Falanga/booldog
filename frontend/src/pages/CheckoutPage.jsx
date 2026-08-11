@@ -1,17 +1,18 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import axios from "axios";
-import { useGlobal } from "../context/CartContext";
-import { Link, Navigate, useNavigate } from "react-router-dom";
+import { useCart } from "../context/useCart";
+import { Link, useNavigate } from "react-router-dom";
+import { API_BASE_URL } from "../lib/api";
 
 export default function CheckoutPage() {
   const [couponCode, setCouponCode] = useState("");
   const [couponStatus, setCouponStatus] = useState(null); // null | "valid" | "invalid"
   const [couponMessage, setCouponMessage] = useState("");
   const [discount, setDiscount] = useState(0);
-  const [appliedCouponId, setAppliedCouponId] = useState(null);
+  const [, setAppliedCouponId] = useState(null);
   const [isLoadingCoupon, setIsLoadingCoupon] = useState(false);
   const [couponName, setCouponName] = useState(null);
-  const { cart, setCart } = useGlobal();
+  const { cart, setCart } = useCart();
   const [orderMessage, setOrderMessage] = useState(null);
   const [serverError, setServerError] = useState("");
   const [newOrder, setNewOrder] = useState({
@@ -50,7 +51,6 @@ export default function CheckoutPage() {
   async function handleSubmit(e) {
     e.preventDefault();
 
-    // pulisco eventuali errori precedenti prima di rinviare l'ordine
     setServerError("");
 
     const orderToSend = {
@@ -64,7 +64,7 @@ export default function CheckoutPage() {
 
     try {
       const { data } = await axios.post(
-        "http://localhost:3000/orders",
+        `${API_BASE_URL}/orders`,
         orderToSend,
       );
       console.log(data);
@@ -78,7 +78,6 @@ export default function CheckoutPage() {
       const data = error.response?.data;
 
       if (Array.isArray(data?.errors)) {
-        // unisco tutti i messaggi di validazione in una sola stringa
         const messages = data.errors.map((err) => err.msg).join(" · ");
         setServerError(messages);
       } else if (data?.error) {
@@ -102,7 +101,7 @@ export default function CheckoutPage() {
     setDiscount(0);
 
     try {
-      const { data } = await axios.post("http://localhost:3000/coupons", {
+      const { data } = await axios.post(`${API_BASE_URL}/coupons`, {
         code: couponCode.trim(),
         products: cart.map((item) => ({
           id: item.id,
@@ -159,7 +158,7 @@ export default function CheckoutPage() {
         <div className="container ">
           <div className="row row-cols-1 row-cols-md-2">
             <div className="col">
-              {/* CONTATTO */}
+              {/* CONTACT */}
               <div className="d-flex flex-column justify-content-between d-lg-flex flex-lg-row ">
                 <div className="d-flex gap-2 align-items-end ">
                   <p className="cart-meta">01</p>
@@ -210,7 +209,7 @@ export default function CheckoutPage() {
                 </div>
               </div>
 
-              {/* SPEDIZIONE */}
+              {/* SHIPPING */}
               <div className="mt-5">
                 <div className="d-flex gap-2 align-items-end ">
                   <p className="cart-meta">02</p>

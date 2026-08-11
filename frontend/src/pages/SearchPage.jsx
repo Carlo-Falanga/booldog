@@ -1,12 +1,11 @@
 import axios from 'axios';
 import { useState, useEffect } from 'react';
 import { useParams, useSearchParams } from 'react-router-dom';
-import { useGlobal } from '../context/CartContext';
+import { useCart } from '../context/useCart';
 import ProductCard from '../components/ProductCard';
 import ProductCardList from '../components/ProductCardList';
-import OrderSelect from '../components/OrderSelect';
-import GridListButton from '../components/GridListButton';
 import Loader from '../components/Loader';
+import { API_BASE_URL } from '../lib/api';
 
 export default function SearchPage() {
 
@@ -17,18 +16,25 @@ export default function SearchPage() {
     const search = searchParams.get('search') || '';
     const order = searchParams.get('sort') || '';
 
-    const [products, setProducts] = useState([]);
     const [listView, setListView] = useState(false);
 
     const url = animalSlug
-        ? `http://localhost:3000/products/animal/${endpoint}`
-        : `http://localhost:3000/products`;
+        ? `${API_BASE_URL}/products/animal/${endpoint}`
+        : `${API_BASE_URL}/products`;
+    const queryUrl = `${url}?sort=${order}&search=${search}`;
+
+    const [products, setProducts] = useState([]);
+    // the url the shown results came from, so loading is derived instead of stored
+    const [loadedQueryUrl, setLoadedQueryUrl] = useState(null);
+    const isLoading = loadedQueryUrl !== queryUrl;
 
     useEffect(() => {
-        setProducts([]);
-        axios.get(`${url}?sort=${order}&search=${search}`)
-            .then(res => setProducts(res.data));
-    }, [order, search, endpoint]);
+        axios.get(queryUrl)
+            .then(res => {
+                setProducts(res.data);
+                setLoadedQueryUrl(queryUrl);
+            });
+    }, [queryUrl]);
 
     function handleFilterChange(key, value) {
         const newParams = new URLSearchParams(searchParams);
@@ -41,7 +47,7 @@ export default function SearchPage() {
         setSearchParams(newParams);
     }
 
-    const { addToCart } = useGlobal();
+    const { addToCart } = useCart();
 
     const sortOptions = [
         { value: '', label: 'Novità' },
@@ -60,7 +66,7 @@ export default function SearchPage() {
     return (
         <>
 
-            {/* herospace */}
+            {/* hero */}
             <section className=" px-3 px-md-5 pt-5 pb-4 bg-paper mb-5">
                 <div className="container-fluid">
 
@@ -176,7 +182,11 @@ export default function SearchPage() {
                     </div>
 
                     {/* prodotti */}
-                    {products.length > 0 ? (
+                    {isLoading ? (
+                        <div className="d-flex justify-content-center align-items-center" style={{ minHeight: '40vh' }}>
+                            <Loader />
+                        </div>
+                    ) : products.length > 0 ? (
                         <div className={`row ${listView ? 'g-2 g-lg-3 g-xl-4' : 'g-2 g-lg-3 g-xl-4'}`}>
                             {products.map(product => (
                                 listView ? (
@@ -200,9 +210,7 @@ export default function SearchPage() {
                         </div>
                     ) : (
                         <div className="d-flex justify-content-center align-items-center" style={{ minHeight: '40vh' }}>
-                            {search
-                                ? <h2 className="text-center">Nessun prodotto trovato</h2>
-                                : <Loader />}
+                            <h2 className="text-center">Nessun prodotto trovato</h2>
                         </div>
                     )}
 

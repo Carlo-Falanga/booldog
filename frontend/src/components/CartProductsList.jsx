@@ -1,13 +1,13 @@
-import { useGlobal } from "../context/CartContext";
+import { useCart } from "../context/useCart";
 import { Link } from "react-router-dom";
+import { getProductImageUrl } from "../lib/api";
 
 export default function CartProductsList() {
-  const { cart, setCart, total, updateQuantity, removeFromCart } = useGlobal();
+  const { cart, updateQuantity, removeFromCart } = useCart();
 
   return (
     <>
       <section className="cart-items">
-        {/* Header */}
         <div className="d-flex align-items-baseline justify-content-between pb-3 border-bottom mb-4">
           <div className="d-flex align-items-baseline gap-3">
             <h3 className="mb-0">Articoli</h3>
@@ -25,14 +25,10 @@ export default function CartProductsList() {
             </p>
           </div>}
 
-        {/* Lista */}
         <ul className="list-unstyled m-0">
           {cart.map((item) => {
-            // se non conosco lo stock non blocco i bottoni
             const hasStock = typeof item.stock === "number";
-            // disabilito "+" se ho già raggiunto il massimo disponibile
             const isPlusDisabled = hasStock && item.quantity >= item.stock;
-            // disabilito "-" se sono già a 1 (non si può scendere sotto)
             const isMinusDisabled = item.quantity <= 1;
 
             return (
@@ -40,28 +36,20 @@ export default function CartProductsList() {
                 key={item.slug}
                 className="d-flex flex-wrap gap-4__ py-4 border-bottom cart-item"
               >
-                {/* Immagine */}
                 <div className="col-3 p-1">
                   <Link
                     to={`/product/${item.slug}`}
                     className="text-decoration-none text-reset aspect-ratio-1x1 d-flex align-items-center justify-content-center"
                   >
                     <img
-                      src={`http://localhost:3000/images/products/${item.img_url}`}
+                      src={getProductImageUrl(item.img_url)}
                       alt={item.name}
                       className="w-100 h-100 object-fit-contain"
                     />
                   </Link>
                 </div>
 
-                {/* Info */}
                 <div className="col-9 col-md-6 px-3">
-                  {/* <Link
-                    to={`/product/${item.slug}`}
-                    className="text-decoration-none text-reset"
-                  > */}
-                  <h3 className="cart-name fs-4 mb-2">{item.name}</h3>
-                  {/* </Link> */}
 
                   <p className="small mb-3 cart-meta">
                     {item.size && (
@@ -78,7 +66,6 @@ export default function CartProductsList() {
                     )}
                   </p>
 
-                  {/* Controlli */}
                   <div className="d-flex align-items-center gap-3 flex-wrap">
                     <div className="quantity-controls rounded-pill bg-paper border d-flex">
                       <button
@@ -115,7 +102,6 @@ export default function CartProductsList() {
                   </div>
                 </div>
 
-                {/* Prezzo */}
                 <div className="col-3 text-end d-none d-md-block">
                   <span className="cart-name fs-4">€ {item.price}</span>
                 </div>

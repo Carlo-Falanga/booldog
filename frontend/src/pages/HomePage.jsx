@@ -1,47 +1,37 @@
 import { useState, useEffect } from "react";
-import { useGlobal } from "../context/CartContext";
+import { useCart } from "../context/useCart";
 import axios from "axios";
 import { Link } from "react-router-dom";
 import ProductCard from "../components/ProductCard";
-
-
-
-const API_URL = "http://localhost:3000";
+import { API_BASE_URL, getBrandImageUrl } from "../lib/api";
 
 function HomePage() {
 
   const {
     addToCart,
-  } = useGlobal();
+  } = useCart();
 
 
-  const [products, setProducts] = useState([]);
   const [filteredProducts, setFilteredProducts] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
-  const [activeFilter, setActiveFilter] = useState("tutti");
   const [marchi, setMarchi] = useState([]);
 
   useEffect(() => {
     axios
-      .get(`${API_URL}/products`)
+      .get(`${API_BASE_URL}/products`)
       .then((res) => {
         const featured = res.data.filter(
           (p) => p.is_featured === 1 || p.is_featured === true,
         );
-        setProducts(featured);
         setFilteredProducts(featured);
-        setLoading(false);
       })
       .catch((err) => {
-        setError(err.message);
-        setLoading(false);
+        console.error("Errore caricamento prodotti:", err);
       });
   }, []);
 
   useEffect(() => {
     axios
-      .get(`${API_URL}/brands`)
+      .get(`${API_BASE_URL}/brands`)
       .then((res) => setMarchi(res.data))
       .catch((err) => console.error("Errore caricamento brand:", err));
   }, []);
@@ -102,7 +92,7 @@ function HomePage() {
         </div>
       </section>
 
-      {/* ── CATEGORIE ── */}
+      {/* ── CATEGORIES ── */}
       <section id="categorie" className="container py-5 my-5">
         <header className="border-bottom pb-5 my-5">
           <h2 className="section-title mb-0">
@@ -198,7 +188,7 @@ function HomePage() {
         </div >
       </section >
 
-      {/* ── PRODOTTI IN EVIDENZA ── */}
+      {/* ── FEATURED ── */}
       <section section id="prodotti" className="container py-5 my-5" >
         <header className="border-bottom pb-3 my-5">
           <h2 className="section-title mb-0">
@@ -218,7 +208,7 @@ function HomePage() {
         </div>
       </section> 
 
-      {/* ── MARCHI ── */}
+      {/* ── BRANDS ── */}
       <section section
         id="marchi"
         className="custom_brand_bg text-light overflow-hidden"
@@ -246,7 +236,7 @@ function HomePage() {
                 key={marchio.id}
               >
                 <img
-                  src={`${API_URL}/images/brands/${marchio.logo_url}`}
+                  src={getBrandImageUrl(marchio.logo_url)}
                   alt={marchio.name}
                   className="brand-img p-2"
                 />

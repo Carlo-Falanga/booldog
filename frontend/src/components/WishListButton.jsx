@@ -1,4 +1,4 @@
-import { useWishlist } from "../context/WishListContext";
+import { useWishlist } from "../context/useWishlist";
 
 export default function WishListButton({ product, slug }) {
 

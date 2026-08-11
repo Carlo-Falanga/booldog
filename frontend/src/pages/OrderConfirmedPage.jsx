@@ -2,6 +2,7 @@ import { useParams } from "react-router-dom";
 import axios from "axios";
 import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
+import { API_BASE_URL } from "../lib/api";
 
 export default function OrderConfirmedPage() {
   const { id } = useParams();
@@ -9,13 +10,13 @@ export default function OrderConfirmedPage() {
 
   useEffect(() => {
     axios
-      .get(`http://localhost:3000/orders/${id}`, {
+      .get(`${API_BASE_URL}/orders/${id}`, {
         params: { id: id },
       })
       .then(({ data }) => {
         setData(data);
       });
-  }, []);
+  }, [id]);
 
   return (
     <>

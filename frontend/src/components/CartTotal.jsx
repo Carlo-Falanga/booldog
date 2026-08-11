@@ -1,7 +1,7 @@
-import { useGlobal } from "../context/CartContext";
+import { useCart } from "../context/useCart";
 
 export default function CartTotal() {
-  const { total } = useGlobal();
+  const { total } = useCart();
   return (
     <div className="d-flex justify-content-between align-items-baseline pt-3 border-top">
       <h3 className="cart-name mb-0">Totale</h3>

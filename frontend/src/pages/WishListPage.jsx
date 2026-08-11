@@ -1,7 +1,6 @@
-import { Link } from "react-router-dom";
 import { useState } from "react";
-import { useGlobal } from "../context/CartContext";
-import { useWishlist } from "../context/WishListContext";
+import { useCart } from "../context/useCart";
+import { useWishlist } from "../context/useWishlist";
 import ProductCard from "../components/ProductCard";
 import ProductCardList from "../components/ProductCardList";
 import GridListButton from "../components/GridListButton";
@@ -11,7 +10,7 @@ export default function WishListPage() {
 
   const [listView, setListView] = useState(true)
 
-  const { addToCart } = useGlobal();
+  const { addToCart } = useCart();
   const { wishlist } = useWishlist();
 
   return (
