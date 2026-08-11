@@ -68,7 +68,6 @@ export default function CheckoutPage() {
         `${API_BASE_URL}/orders`,
         orderToSend,
       );
-      console.log(data);
       setOrderMessage(true);
 
       setTimeout(() => {
@@ -93,7 +92,6 @@ export default function CheckoutPage() {
 
   const handleApplyCoupon = async (e) => {
     e.preventDefault();
-    console.log(couponCode);
     if (!couponCode.trim()) return;
 
     setIsLoadingCoupon(true);
@@ -117,7 +115,6 @@ export default function CheckoutPage() {
         setCouponMessage(`Coupon applicato! Sconto di ${formatPrice(data.discount)}`);
         setCouponName(data.coupon);
 
-        console.log(data);
       } else {
         setDiscount(0);
         setCouponStatus("invalid");
