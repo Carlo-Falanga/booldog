@@ -1,240 +1,141 @@
-import booldog_logo from "../assets/logo/Booldog_logo.png";
 import { Link } from "react-router-dom";
 import { useState } from "react";
-import "@fortawesome/fontawesome-free/css/all.min.css";
+import booldog_logo from "../assets/logo/Booldog_logo.png";
+
+const SHOP_LINKS = [
+  { label: "Homepage", to: "/" },
+  { label: "Prodotti", to: "/products" },
+  { label: "I tuoi preferiti", to: "/wishlist" },
+];
+
+const SOCIAL_LINKS = [
+  { label: "Instagram", icon: "bi-instagram" },
+  { label: "Facebook", icon: "bi-facebook" },
+  { label: "TikTok", icon: "bi-tiktok" },
+  { label: "X", icon: "bi-twitter-x" },
+  { label: "WhatsApp", icon: "bi-whatsapp" },
+];
+
+const PAYMENT_METHODS = [
+  "Visa",
+  "Mastercard",
+  "PayPal",
+  "Apple Pay",
+  "Stripe",
+];
+
+const POLICIES = [
+  {
+    id: "cookie",
+    label: "Cookie Policy",
+    text: "Questo sito utilizza cookie tecnici e, previo consenso, cookie di profilazione. Per maggiori informazioni consulta la nostra Cookie Policy.",
+  },
+  {
+    id: "privacy",
+    label: "Privacy Policy",
+    text: "I dati personali sono trattati da BoolDog S.r.l. in qualità di Titolare del Trattamento, ai sensi del Regolamento UE 2016/679 (GDPR).",
+  },
+  {
+    id: "terms",
+    label: "Termini e Condizioni",
+    text: "L'acquisto dei prodotti su booldog.it è regolato dai presenti Termini e Condizioni. Il consumatore ha diritto di recesso entro 14 giorni dalla ricezione del prodotto.",
+  },
+];
 
 export default function AppFooter() {
-  const [openCookiePolicy, setOpenCookiePolicy] = useState(false);
-  const [openPrivacyPolicy, setOpenPrivacyPolicy] = useState(false);
-  const [openTermsPolicy, setOpenTermsPolicy] = useState(false);
+  const [openPolicy, setOpenPolicy] = useState(null);
 
-  function toggleCookiePolicy() {
-    setOpenCookiePolicy(!openCookiePolicy);
-  }
-  function togglePrivacyPolicy() {
-    setOpenPrivacyPolicy(!openPrivacyPolicy);
-  }
-  function toggleTermsPolicy() {
-    setOpenTermsPolicy(!openTermsPolicy);
-  }
+  const togglePolicy = (id) => {
+    setOpenPolicy(openPolicy === id ? null : id);
+  };
+
+  const openPolicyText = POLICIES.find((policy) => policy.id === openPolicy);
 
   return (
-    <footer className="py-4 mt-auto container-fluid text-black ">
-      <div className="d-flex justify-content-center  mb-5">
-        <img className="logo_footer img_no_hover" src={booldog_logo} alt="BoolDog logo" />
-      </div>
-      <div className="row row-cols-1 row-cols-md-3 g-4 d-flex">
+    <footer className="mt-auto">
+      <div className="container py-5">
+        <div className="row g-4 g-lg-5">
+          <div className="col-12 col-lg-3">
+            <img
+              className="footer-logo mb-4"
+              src={booldog_logo}
+              alt="BoolDog"
+            />
+            <ul className="footer-social list-unstyled d-flex gap-3 mb-0">
+              {SOCIAL_LINKS.map((social) => (
+                <li key={social.label}>
+                  <a href="#" aria-label={social.label}>
+                    <i className={`bi ${social.icon}`}></i>
+                  </a>
+                </li>
+              ))}
+            </ul>
+          </div>
 
-        <div className="col d-flex flex-column  ">
-          <ul className="list-unstyled d-flex flex-column gap-2">
-            <li>
-              <h3 className="text-black">Informazioni legali e aziendali</h3>
-            </li>
+          <div className="col-6 col-lg-3">
+            <h2 className="cart-meta mb-3">Negozio</h2>
+            <ul className="list-unstyled d-flex flex-column gap-2 mb-0">
+              {SHOP_LINKS.map((link) => (
+                <li key={link.to}>
+                  <Link className="footer-link" to={link.to}>
+                    {link.label}
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          </div>
 
-            <li className="d-flex gap-2 text-black">
-              <span className="text-black">Ragione sociale:</span>
-              <span className="text-black">BoolDog S.r.l.</span>
-            </li>
-
-            <li className="d-flex gap-2 text-black flex-wrap">
-              <span className="text-black">Sede&nbsp;legale:</span>
-              <span className="text-black">Via BoolStreat, 7 - 20121 Milano(MI)</span>
-            </li>
-
-            <li className="d-flex gap-2 text-black">
-              <span className="text-black">P.IVA:</span>
-              <span className="text-black">IT 04782631098</span>
-            </li>
-
-            <li className="d-flex gap-2 text-black">
-              <span className="text-black">REA:</span>
-              <span className="text-black">MI - 2187634</span>
-            </li>
-
-            <li className="d-flex gap-2 text-black">
-              <span className="text-black">Capitale sociale:</span>
-              <span className="text-black">€10.000,00 i.v.</span>
-            </li>
-
-            <li className="d-flex gap-2 text-black">
-              <span className="text-black">PEC:</span>
-              <span className="text-black">booldog@pec.it</span>
-            </li>
-
-            <li className="d-flex gap-2 text-black">
-              <div className="d-flex flex-column align-items-start">
-                <button
-                  onClick={toggleCookiePolicy}
-                  className="hover_footer border border-0 bg-transparent ps-0"
-                >
-                  <span className="text-black">Cookie Policy</span>
-                </button>
-                {openCookiePolicy && (
-                  <div className="card p-2 mb-3">
-                    <p className="text-black text-center m-0">
-                      Questo sito utilizza cookie tecnici e, previo consenso, cookie
-                      di profilazione. Per maggiori informazioni consulta la nostra
-                      Cookie Policy.
-                    </p>
-                  </div>
-                )}
-              </div>
-
-            </li>
-
-            <li className="d-flex gap-2 text-black">
-              <div className="d-flex flex-column align-items-start">
-                <button
-                  onClick={togglePrivacyPolicy}
-                  className="hover_footer border border-0 bg-transparent ps-0"
-                >
-                  <span className="text-black">Privacy Policy</span>
-                </button>
-                {openPrivacyPolicy && (
-                  <div className="card p-2 mb-3">
-                    <p className="text-black text-center">
-                      I dati personali sono trattati da BoolDog S.r.l. in qualità di
-                      Titolare del Trattamento, ai sensi del Regolamento UE 2016/679
-                      (GDPR).
-                    </p>
-                  </div>
-                )}
-              </div>
-
-            </li>
-
-            <li className="d-flex gap-2 text-black">
-              <div className="d-flex flex-column align-items-start">
-                <button
-                  onClick={toggleTermsPolicy}
-                  className="hover_footer border border-0 bg-transparent ps-0"
-                >
-                  <span className="text-black">Termini e Condizioni</span>
-                </button>
-                {openTermsPolicy && (
-                  <div className="card p-2 mb-3">
-                    <p className="text-black text-center">
-                      L'acquisto dei prodotti su booldog.it è regolato dai presenti
-                      Termini e Condizioni. Il consumatore ha diritto di recesso
-                      entro 14 giorni dalla ricezione del prodotto.
-                    </p>
-                  </div>
-                )}
-              </div>
-
-            </li>
-
-
-          </ul>
-        </div>
-
-
-
-
-        <div className="col d-flex flex-column align-items-start align-items-lg-center align-self-start">
-          <ul className="list-unstyled d-flex flex-column gap-2">
-            <li>
-              <h3 className="text-black">Navigazione utile</h3>
-            </li>
-            <Link className="text-decoration-none" to="/">
-              <li className="hover_footer text-black">Homepage</li>
-            </Link>
-            <Link className="text-decoration-none" to="/products">
-              <li className="hover_footer text-black">Prodotti</li>
-            </Link>
-            <Link className="text-decoration-none" to="/wishlist">
-              <li className="hover_footer text-black">
-                I tuoi prodotti preferiti
+          <div className="col-6 col-lg-3">
+            <h2 className="cart-meta mb-3">Assistenza</h2>
+            <ul className="list-unstyled d-flex flex-column gap-2 mb-0">
+              <li>
+                <a className="footer-link" href="mailto:info@booldog.it">
+                  info@booldog.it
+                </a>
               </li>
-            </Link>
-          </ul>
+              <li>
+                <a className="footer-link" href="tel:+390248712233">
+                  +39 02 4871 2233
+                </a>
+              </li>
+            </ul>
+          </div>
+
+          <div className="col-12 col-lg-3">
+            <h2 className="cart-meta mb-3">Pagamenti</h2>
+            <p className="footer-payments mb-0">
+              {PAYMENT_METHODS.join(" · ")}
+            </p>
+          </div>
         </div>
 
-        <div className="col d-flex flex-column align-items-start align-items-lg-end align-self-start">
-          <ul className="list-unstyled d-flex flex-column gap-2">
-            <li>
-              <h3 className="text-black">Assistenza clienti</h3>
-            </li>
-            <li className="d-flex gap-3">
-              <span className="text-black">Email:</span>
-              <span className="text-black">info@booldog.it</span>
-            </li>
-            <li className="d-flex gap-3">
-              <span className="text-black">Telefono:</span>
-              <span className="text-black">+39 02 4871 2233</span>
-            </li>
-          </ul>
+        <div className="footer-legal mt-5 pt-4">
+          <p className="mb-2">
+            BoolDog S.r.l. · Via BoolStreat 7, 20121 Milano (MI) · P.IVA IT
+            04782631098 · REA MI-2187634 · Capitale sociale €10.000,00 i.v. ·
+            PEC booldog@pec.it
+          </p>
+
+          <div className="d-flex flex-wrap align-items-center gap-3">
+            <span>© {new Date().getFullYear()} BoolDog</span>
+            {POLICIES.map((policy) => (
+              <button
+                key={policy.id}
+                type="button"
+                className="footer-policy-button"
+                onClick={() => togglePolicy(policy.id)}
+              >
+                {policy.label}
+              </button>
+            ))}
+          </div>
+
+          {openPolicyText && (
+            <p className="footer-policy-text mt-3 mb-0">
+              {openPolicyText.text}
+            </p>
+          )}
         </div>
-      </div>
-
-      <div className="row row-cols-1 row-cols-md-2 mt-3 g-4">
-        <div className="col d-flex flex-column align-items-center">
-          <ul className="list-unstyled d-flex flex-column align-items-center">
-            <li>
-              <h3 className="text-black">Pagamenti e sicurezza</h3>
-            </li>
-
-            <li className="row g-3 justify-content-center text-center text-black">
-              <div className="col-4 col-md-auto">
-                <i className="fa-brands fa-cc-visa fa-2x"></i>
-              </div>
-              <div className="col-4 col-md-auto">
-                <i className="fa-brands fa-cc-mastercard fa-2x"></i>
-              </div>
-              <div className="col-4 col-md-auto">
-                <i className="fa-brands fa-cc-paypal fa-2x"></i>
-              </div>
-              <div className="col-4 col-md-auto">
-                <i className="fa-brands fa-cc-apple-pay fa-2x"></i>
-              </div>
-              <div className="col-4 col-md-auto">
-                <i className="fa-brands fa-cc-stripe fa-2x"></i>
-              </div>
-            </li>
-          </ul>
-        </div>
-
-        <div className="col d-flex flex-column align-items-center">
-          <ul className="list-unstyled d-flex flex-column align-items-center">
-            <li>
-              <h3 className="text-black">Social</h3>
-            </li>
-
-            <li className="row g-3 justify-content-center text-center text-black">
-              <div className="col-4 col-md-auto hover_footer">
-                <a href="#" className=" text-decoration-none text-black">
-                  <i className="fa-brands fa-instagram fa-2x"></i>
-                </a>
-              </div>
-              <div className="col-4 col-md-auto hover_footer">
-                <a href="#" className=" text-decoration-none text-black">
-                  <i className="fa-brands fa-facebook fa-2x"></i>
-                </a>
-              </div>
-              <div className="col-4 col-md-auto hover_footer">
-                <a href="#" className=" text-decoration-none text-black">
-                  <i className="fa-brands fa-tiktok fa-2x"></i>
-                </a>
-              </div>
-              <div className="col-4 col-md-auto hover_footer">
-                <a href="#" className=" text-decoration-none text-black">
-                  <i className="fa-brands fa-x-twitter fa-2x"></i>
-                </a>
-              </div>
-              <div className="col-4 col-md-auto hover_footer">
-                <a href="#" className=" text-decoration-none text-black">
-                  <i className="fa-brands fa-whatsapp fa-2x"></i>
-                </a>
-              </div>
-            </li>
-          </ul>
-        </div>
-      </div>
-
-      <div className="d-flex justify-content-center align-items-center gap-2  ">
-        <span className="text-black mb-0 small">
-          © {new Date().getFullYear()} BoolDog — Tutti i diritti riservati
-        </span>
       </div>
     </footer>
   );

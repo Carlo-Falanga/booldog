@@ -404,11 +404,6 @@ main {
   width: auto;
 }
 
-.logo_footer {
-  height: 100px;
-  width: auto;
-}
-
 .navbar_icons_hover:hover {
   scale: 1.08;
   transition: all 0.3s;
@@ -605,13 +600,6 @@ main {
   transform: scale(1.05);
 }
 
-.hover_footer:hover {
-  color: var(--bool-forest);
-  scale: 1.05;
-  transition: all 0.2s;
-
-}
-
 
 
 /* NAVBAR */
@@ -718,6 +706,56 @@ main {
 
 footer {
   background-color: var(--bool-paper);
+  border-top: 1px solid var(--bool-line);
+}
+
+.footer-logo {
+  height: 56px;
+  width: auto;
+}
+
+.footer-link,
+.footer-social a {
+  color: var(--bool-ink-2);
+  text-decoration: none;
+  transition: color 0.2s;
+}
+
+.footer-link:hover,
+.footer-social a:hover {
+  color: var(--bool-forest);
+}
+
+.footer-social i {
+  font-size: 1.25rem;
+}
+
+.footer-payments {
+  font-size: 0.875rem;
+  color: var(--bool-ink-2);
+}
+
+.footer-legal {
+  border-top: 1px solid var(--bool-line);
+  font-size: 0.8125rem;
+  color: var(--bool-muted);
+}
+
+.footer-policy-button {
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: var(--bool-muted);
+  text-decoration: underline;
+  transition: color 0.2s;
+}
+
+.footer-policy-button:hover {
+  color: var(--bool-forest);
+}
+
+.footer-policy-text {
+  max-width: 60ch;
 }
 
 .required-star {
