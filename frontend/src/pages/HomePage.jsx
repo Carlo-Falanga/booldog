@@ -58,8 +58,8 @@ function HomePage() {
                   className="fs-5 text-body-secondary mb-4"
                   style={{ maxWidth: "44ch" }}
                 >
-                  Giochi, accessori e tanto amore. Scopri i nostri prodotti
-                  selezionati per il benessere del tuo animale.
+                  Dieci marche, dal guinzaglio al tiragraffi. Spedizione
+                  gratuita in tutta Europa.
                 </p>
                 <div className="d-flex flex-wrap gap-2 mb-5">
                   <a
@@ -96,9 +96,9 @@ function HomePage() {
       <section id="categorie" className="container py-5 my-5">
         <header className="border-bottom pb-5 my-5">
           <h2 className="section-title mb-0">
-            Due animali, due <em>universi.</em>
+            Due animali,
             <br />
-            Una sola filosofia.
+            due <em>cataloghi.</em>
           </h2>
         </header>
         <div className="d-flex flex-column gap-3 gap-md-4 mb-5">
@@ -119,8 +119,7 @@ function HomePage() {
                       className="mt-4 text-body-secondary"
                       style={{ maxWidth: "38ch" }}
                     >
-                      Giochi, guinzagli, cucce e tanto altro per il benessere del
-                      tuo cane.
+                      Pettorine, guinzagli, cucce, trasportini e giochi.
                     </p>
                   </div>
                   <div className="border-top mt-4 pt-4 d-flex justify-content-end">
@@ -168,8 +167,7 @@ function HomePage() {
                       className="mt-4 text-body-secondary"
                       style={{ maxWidth: "38ch" }}
                     >
-                      Lettiere, giocattoli e accessori per il tuo
-                      gatto.
+                      Tiragraffi, lettiere, ciotole e giochi.
                     </p>
                   </div>
                   <div className="border-top mt-4 pt-4 d-flex justify-content-end">
