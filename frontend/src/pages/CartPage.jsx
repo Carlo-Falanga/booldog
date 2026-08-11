@@ -95,7 +95,7 @@ export default function CartPage() {
                     <i className="bi bi-box-seam fs-5 text-dark"></i>
                     <div>
                       <div className="fw-medium">
-                        Spedito da Boolean Best Team
+                        Spedizione tracciata
                       </div>
                       <div className="small text-muted">
                         Corriere espresso · consegna 24/48h
