@@ -380,10 +380,39 @@ main {
   line-height: 16px;
 }
 
-.my-custom-table td,
-.my-custom-table th {
-  background-color: var(--bool-clay-deep);
-  color: var(--bool-bone);
+.order-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.order-table th {
+  font-family: var(--bool-font-mono);
+  font-size: 0.6875rem;
+  font-weight: 400;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--bool-muted);
+  padding-bottom: 12px;
+  border-bottom: 1px solid var(--bool-line);
+}
+
+.order-table td {
+  padding: 16px 0;
+  border-bottom: 1px solid var(--bool-line);
+}
+
+/* only the product name reads as text, the rest are figures */
+.order-table th:not(:first-child),
+.order-table td:not(:first-child) {
+  text-align: right;
+}
+
+.order-table .order-total td {
+  border-bottom: 0;
+  border-top: 1px solid var(--bool-ink);
+  padding-top: 24px;
+  font-family: var(--bool-font-display);
+  font-size: 1.5rem;
 }
 
 .bg_404_img {

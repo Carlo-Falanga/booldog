@@ -23,16 +23,12 @@ export default function OrderConfirmedPage() {
     <>
       <div className="container mt-5 mb-5">
         <div className="card rounded-4 p-4 bg-paper">
-          <h3 className="cart-hero mt-3 mb-5 d-flex flex-wrap justify-content-center">
-            <span className="d-block">
-              Ordine
-            </span>
-            <em className="d-block">Confermato!</em>
-          </h3>
+          <h1 className="cart-hero mt-3 mb-5">
+            <span className="d-block">Ordine</span>
+            <em className="d-block">Confermato.</em>
+          </h1>
 
-          <span className="fw-medium d-flex justify-content-center m-3">
-            Dati di fatturazione
-          </span>
+          <h2 className="cart-meta mb-3">Dati di fatturazione</h2>
           <ul className="list-unstyled">
             <li>
               <span className="fw-semibold">Cliente:</span>{" "}
@@ -53,9 +49,7 @@ export default function OrderConfirmedPage() {
             </li>
           </ul>
           <hr />
-          <span className="fw-medium d-flex justify-content-center m-3">
-            Dettagli dell'ordine
-          </span>
+          <h2 className="cart-meta mb-3">Dettagli dell'ordine</h2>
           <ul className="list-unstyled">
             <li>
               <span className="fw-semibold">Codice Ordine:</span>{" "}
@@ -71,16 +65,10 @@ export default function OrderConfirmedPage() {
                 minute: "2-digit",
               })}
             </li>
-            <li>
-              <span className="fw-semibold">Totale:</span> {formatPrice(data.total)}
-            </li>
           </ul>
           <hr />
-          <span className="fw-medium d-flex justify-content-center m-3">
-            Prodotti acquistati
-          </span>
           <div className="table-responsive">
-            <table className="table table-hover my-custom-table">
+            <table className="order-table">
               <thead>
                 <tr>
                   <th scope="col">Prodotto</th>
@@ -90,19 +78,17 @@ export default function OrderConfirmedPage() {
                 </tr>
               </thead>
               <tbody>
-                {data.items?.map((item, index) => (
-                  <tr key={index}>
+                {data.items?.map((item) => (
+                  <tr key={item.id}>
                     <td>{item.name}</td>
                     <td>{item.quantity}</td>
                     <td>{formatPrice(item.price)}</td>
                     <td>{formatPrice(item.price * item.quantity)}</td>
                   </tr>
                 ))}
-                <tr className="table-dark">
-                  <td className="fw-bold" colSpan={3}>
-                    Totale
-                  </td>
-                  <td className="fw-semibold">{formatPrice(data.total)}</td>
+                <tr className="order-total">
+                  <td colSpan={3}>Totale</td>
+                  <td>{formatPrice(data.total)}</td>
                 </tr>
               </tbody>
             </table>
