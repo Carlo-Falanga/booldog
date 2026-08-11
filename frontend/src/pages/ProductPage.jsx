@@ -145,9 +145,12 @@ export default function ProductPage() {
 
                       </button>
                     </div>
-                    {productQuantity && cart.length > 0 && (
-                      <span className=" mt-1 already-present d-block">
-                        {quantityInCart} articolo/i nel tuo carrello.
+                    {quantityInCart > 0 && (
+                      <span className="mt-1 already-present d-block">
+                        {quantityInCart === 1
+                          ? "1 articolo"
+                          : `${quantityInCart} articoli`}{" "}
+                        nel tuo carrello.
                       </span>
                     )}
                   </div>
