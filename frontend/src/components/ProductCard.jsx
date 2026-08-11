@@ -17,7 +17,11 @@ export default function ProductCard({ product, animalType }) {
       <div className="d-flex flex-column h-100">
 
         <div className="col-auto position-relative">
-          <WishListButton product={product} slug={product.slug} />
+          <WishListButton
+            product={product}
+            slug={product.slug}
+            className="position-absolute top-0 end-0 z-1 m-2"
+          />
           <Link to={`/product/${product.slug}`} className="aspect-ratio-1x1 d-flex align-items-center justify-content-center">
             <img className="w-100 h-100 object-fit-contain p-3" src={getProductImageUrl(product.img_url)} alt={`${product.name}'s picture`} />
           </Link>

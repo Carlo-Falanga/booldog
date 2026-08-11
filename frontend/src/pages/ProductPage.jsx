@@ -62,7 +62,6 @@ export default function ProductPage() {
               <div className="col-10 col-md-5 col-lg-6 offset-1 offset-md-0">
                 <div className="ratio ratio-1x1">
                   <div className="d-flex align-items-center justify-content-center">
-                    <WishListButton product={dataProduct} slug={slug} />
                     <img
                       className="w-100 h-100 object-fit-contain"
                       src={getProductImageUrl(dataProduct.img_url)}
@@ -77,9 +76,12 @@ export default function ProductPage() {
                   <div className="cart-meta mb-3">
                     {dataProduct.animal_name} / {dataProduct.category}
                   </div>
-                  <h1 className="display-3 lh-1 fw-normal">
-                    {dataProduct.name}
-                  </h1>
+                  <div className="d-flex align-items-start justify-content-between gap-3">
+                    <h1 className="display-3 lh-1 fw-normal">
+                      {dataProduct.name}
+                    </h1>
+                    <WishListButton product={dataProduct} slug={slug} />
+                  </div>
                   <p>{dataProduct.description}</p>
                   <div className="cart-meta mb-4">
                     <div className="mb-1">Marca <span className="text-black">{dataProduct.brand_name}</span></div>
