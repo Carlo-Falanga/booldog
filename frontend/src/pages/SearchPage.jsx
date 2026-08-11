@@ -187,7 +187,7 @@ export default function SearchPage() {
                             <Loader />
                         </div>
                     ) : products.length > 0 ? (
-                        <div className={`row ${listView ? 'g-2 g-lg-3 g-xl-4' : 'g-2 g-lg-3 g-xl-4'}`}>
+                        <div className="row g-2 g-lg-3 g-xl-4">
                             {products.map(product => (
                                 listView ? (
                                     <div key={product.slug} className="col-12">
