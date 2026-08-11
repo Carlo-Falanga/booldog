@@ -74,9 +74,6 @@ export default function OrderConfirmedPage() {
             <li>
               <span className="fw-semibold">Totale:</span> {formatPrice(data.total)}
             </li>
-            <li>
-              <span className="fw-semibold">Stato:</span> {data.status}
-            </li>
           </ul>
           <hr />
           <span className="fw-medium d-flex justify-content-center m-3">
@@ -90,7 +87,6 @@ export default function OrderConfirmedPage() {
                   <th scope="col">Quantità</th>
                   <th scope="col">Prezzo</th>
                   <th scope="col">Subtotale</th>
-                  <th scope="col">Totale</th>
                 </tr>
               </thead>
               <tbody>
@@ -100,14 +96,12 @@ export default function OrderConfirmedPage() {
                     <td>{item.quantity}</td>
                     <td>{formatPrice(item.price)}</td>
                     <td>{formatPrice(item.price * item.quantity)}</td>
-                    <td></td>
                   </tr>
                 ))}
                 <tr className="table-dark">
-                  <td className="fw-bold">Totale</td>
-                  <td></td>
-                  <td></td>
-                  <td></td>
+                  <td className="fw-bold" colSpan={3}>
+                    Totale
+                  </td>
                   <td className="fw-semibold">{formatPrice(data.total)}</td>
                 </tr>
               </tbody>
