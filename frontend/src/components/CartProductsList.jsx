@@ -99,12 +99,26 @@ export default function CartProductsList() {
                     </button>
                   </div>
                   <div className="pt-3 d-block d-md-none">
-                    <span className="cart-name fs-4">{formatPrice(item.price)}</span>
+                    <span className="cart-name fs-4">
+                      {formatPrice(item.price * item.quantity)}
+                    </span>
+                    {item.quantity > 1 && (
+                      <span className="cart-meta d-block">
+                        {item.quantity} × {formatPrice(item.price)}
+                      </span>
+                    )}
                   </div>
                 </div>
 
                 <div className="col-3 text-end d-none d-md-block">
-                  <span className="cart-name fs-4">{formatPrice(item.price)}</span>
+                  <span className="cart-name fs-4">
+                    {formatPrice(item.price * item.quantity)}
+                  </span>
+                  {item.quantity > 1 && (
+                    <span className="cart-meta d-block">
+                      {item.quantity} × {formatPrice(item.price)}
+                    </span>
+                  )}
                 </div>
               </li>
             );
