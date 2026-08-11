@@ -172,7 +172,7 @@ export default function CheckoutPage() {
               <hr />
               <div className="d-flex flex-column gap-4">
                 <div className="">
-                  <label htmlFor="inputEmail4" className="form-label cart-meta">
+                  <label htmlFor="email" className="form-label cart-meta">
                     Email <span className="required-star">*</span>
                   </label>
                   <input
@@ -186,7 +186,7 @@ export default function CheckoutPage() {
                   />
                 </div>
                 <div className="">
-                  <label htmlFor="inputTel" className="form-label cart-meta">
+                  <label htmlFor="phone_number" className="form-label cart-meta">
                     Numero di telefono <span className="required-star">*</span>
                   </label>
                   <input
@@ -221,7 +221,7 @@ export default function CheckoutPage() {
               <div className="d-flex flex-column gap-4">
                 <div className="">
                   <label
-                    htmlFor="inputFullName"
+                    htmlFor="user_full_name"
                     className="form-label cart-meta"
                   >
                     Nome e Cognome <span className="required-star">*</span>
@@ -238,7 +238,7 @@ export default function CheckoutPage() {
                 </div>
                 <div className="">
                   <label
-                    htmlFor="inputAddress"
+                    htmlFor="address"
                     className="form-label cart-meta"
                   >
                     Indirizzo <span className="required-star">*</span>
@@ -255,7 +255,7 @@ export default function CheckoutPage() {
                 </div>
                 <div className="d-flex gap-2 mb-3">
                   <div className="">
-                    <label htmlFor="inputCity" className="form-label cart-meta">
+                    <label htmlFor="city" className="form-label cart-meta">
                       Città <span className="required-star">*</span>
                     </label>
                     <input
@@ -270,7 +270,7 @@ export default function CheckoutPage() {
                   </div>
                   <div className="">
                     <label
-                      htmlFor="inputState"
+                      htmlFor="country"
                       className="form-label cart-meta"
                     >
                       Paese <span className="required-star">*</span>
@@ -286,7 +286,7 @@ export default function CheckoutPage() {
                     />
                   </div>
                   <div className="">
-                    <label htmlFor="inputZip" className="form-label cart-meta">
+                    <label htmlFor="zipcode" className="form-label cart-meta">
                       Cap <span className="required-star">*</span>
                     </label>
                     <input
@@ -354,6 +354,7 @@ export default function CheckoutPage() {
                       onChange={(e) => setCouponCode(e.target.value)}
                       disabled={couponStatus === "valid"}
                       placeholder="Codice coupon"
+                      aria-label="Codice coupon"
                     />
                     {couponStatus === "valid" ? (
                       <button
