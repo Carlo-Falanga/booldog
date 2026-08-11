@@ -1,15 +1,11 @@
 import { Link } from "react-router-dom";
-import { useGlobal } from "../context/CartContext";
+import { useUi } from "../context/useUi";
 import CartProductsList from "./CartProductsList";
 import CartTotal from "./CartTotal";
 
 export default function SideCart() {
 
-  const {
-    asideCart,
-    setAsideCart,
-    addToCart
-  } = useGlobal();
+  const { setAsideCart } = useUi();
 
   return (
     <>
