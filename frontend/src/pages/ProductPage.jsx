@@ -92,13 +92,17 @@ export default function ProductPage() {
                   <div className="border-top py-4">
                     <p className="h1 mb-0 lh-1">{formatPrice(dataProduct.price)}</p>
                   </div>
-                  {dataProduct.stock === 0 ? <div className="border-top py-4">
-                    <p className="cart-meta mb-0 esaurito_product">Esaurito</p>
-                  </div> : (dataProduct === 1 ? <div className="border-top py-4">
-                    <p className="cart-meta mb-0">{dataProduct.stock} prodotto disponibile</p>
-                  </div> : <div className="border-top py-4">
-                    <p className="cart-meta mb-0">{dataProduct.stock} prodotti disponibili</p>
-                  </div>)}
+                  <div className="border-top py-4">
+                    {dataProduct.stock === 0 ? (
+                      <p className="cart-meta mb-0 esaurito_product">Esaurito</p>
+                    ) : (
+                      <p className="cart-meta mb-0">
+                        {dataProduct.stock === 1
+                          ? "1 prodotto disponibile"
+                          : `${dataProduct.stock} prodotti disponibili`}
+                      </p>
+                    )}
+                  </div>
 
 
                   <div className="row gx-2">
