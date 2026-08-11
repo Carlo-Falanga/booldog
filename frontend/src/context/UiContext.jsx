@@ -8,13 +8,11 @@ export function UiContextProvider({ children }) {
   const [asideCart, setAsideCart] = useState(false);
   const [asideNav, setAsideNav] = useState(false);
 
-  // closed during render, so a drawer never flashes on the page we land on
-  const [previousPathname, setPreviousPathname] = useState(location.pathname);
-  if (location.pathname !== previousPathname) {
-    setPreviousPathname(location.pathname);
+  // a drawer left open would still be there on the next page
+  useEffect(() => {
     setAsideCart(false);
     setAsideNav(false);
-  }
+  }, [location.pathname]);
 
   useEffect(() => {
     document.body.classList.toggle("aside-cart-open", asideCart);

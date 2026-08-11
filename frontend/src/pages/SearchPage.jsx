@@ -24,15 +24,14 @@ export default function SearchPage() {
     const queryUrl = `${url}?sort=${order}&search=${search}`;
 
     const [products, setProducts] = useState([]);
-    // the url the shown results came from, so loading is derived instead of stored
-    const [loadedQueryUrl, setLoadedQueryUrl] = useState(null);
-    const isLoading = loadedQueryUrl !== queryUrl;
+    const [isLoading, setIsLoading] = useState(true);
 
     useEffect(() => {
+        setIsLoading(true);
         axios.get(queryUrl)
             .then(res => {
                 setProducts(res.data);
-                setLoadedQueryUrl(queryUrl);
+                setIsLoading(false);
             });
     }, [queryUrl]);
 

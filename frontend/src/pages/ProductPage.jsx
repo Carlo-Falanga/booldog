@@ -15,13 +15,8 @@ export default function ProductPage() {
 
   const { slug } = useParams();
 
-  const [previousSlug, setPreviousSlug] = useState(slug);
-  if (slug !== previousSlug) {
-    setPreviousSlug(slug);
-    setProductQuantity(1);
-  }
-
   useEffect(() => {
+    setProductQuantity(1);
     axios
       .get(`${API_BASE_URL}/products/${slug}`)
       .then((res) => setDataProduct(res.data));

@@ -8,7 +8,7 @@ import {
 import { useCart } from "../context/useCart";
 import { useUi } from "../context/useUi";
 import booldog_logo from "../assets/logo/Booldog_logo.png";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 export default function Navbar() {
   const { cart } = useCart();
@@ -19,13 +19,12 @@ export default function Navbar() {
   const [searchParams] = useSearchParams();
   const searchQuery = searchParams.get("search") || "";
 
-  // keeps the field in sync when the url changes from outside, like back and forward
   const [search, setSearch] = useState(searchQuery);
-  const [previousSearchQuery, setPreviousSearchQuery] = useState(searchQuery);
-  if (searchQuery !== previousSearchQuery) {
-    setPreviousSearchQuery(searchQuery);
+
+  // the url can change from outside the field, with a link or the back button
+  useEffect(() => {
     setSearch(searchQuery);
-  }
+  }, [searchQuery]);
 
   function handleSubmit(e) {
     e.preventDefault();
