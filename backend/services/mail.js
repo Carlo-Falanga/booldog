@@ -10,7 +10,11 @@ const transporter = nodemailer.createTransport({
   },
 });
 
+// the public demo has no mail credentials: skip the email instead of waiting for the SMTP timeout
+const mailConfigured = Boolean(process.env.MY_USER);
+
 const sendOrderConfirmation = async (order) => {
+  if (!mailConfigured) return;
   const { email, user_full_name, order_code, total, items } = order;
 
   const itemsHtml = items
@@ -34,6 +38,7 @@ const sendOrderConfirmation = async (order) => {
 };
 
 const sendAdminOrderConfirmation = async (order) => {
+  if (!mailConfigured) return;
   const { email, user_full_name, order_code, total, items } = order;
 
   const itemsHtml = items
